@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:testownik/themes.dart';
+import 'package:testownik/widgets/quiz_card.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -9,16 +12,11 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: Change to quizes cards
       body: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
         itemCount: 25,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(
-              '$index',
-              style: const TextStyle(color: Color(0xFFFFFFFF)),
-            ),
-          );
+          return const QuizCard();
         },
       ),
       appBar: AppBar(
@@ -40,6 +38,9 @@ class HomeView extends StatelessWidget {
             tooltip: 'Ustawienia',
           )
         ],
+        systemOverlayStyle: SystemUiOverlayStyle(
+          systemNavigationBarColor: theme.appBarTheme.backgroundColor,
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => ScaffoldMessenger.of(context).showSnackBar(snackBar),

@@ -10,10 +10,18 @@ var theme = ThemeData(
   textTheme: GoogleFonts.openSansTextTheme(ThemeData.dark().textTheme),
   appBarTheme: const AppBarTheme(
     elevation: 1.0,
+    scrolledUnderElevation: 1.0,
     backgroundColor: Color(0xFF21252B),
     foregroundColor: Colors.white,
     iconTheme: IconThemeData(color: Color(0xFFA5A5A5)),
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: Colors.white, backgroundColor: Color(0xFF39B54A)),
+    foregroundColor: Colors.white,
+    backgroundColor: Color(0xFF39B54A),
+  ),
+  cardTheme: const CardTheme(
+    elevation: 1.0,
+    color: Color(0xFF25282F),
+  ),
+  listTileTheme: const ListTileThemeData(textColor: Colors.white),
 );
