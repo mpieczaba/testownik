@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:testownik/themes.dart';
 import 'package:testownik/widgets/quiz_card.dart';
+import 'package:testownik/widgets/speed_dial.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -24,6 +25,7 @@ class HomeView extends StatelessWidget {
           'Testownik',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
+        // TODO: Change to more dektop-friendly Tooltip widget
         actions: [
           IconButton(
             onPressed: () =>
@@ -42,11 +44,7 @@ class HomeView extends StatelessWidget {
           systemNavigationBarColor: theme.appBarTheme.backgroundColor,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => ScaffoldMessenger.of(context).showSnackBar(snackBar),
-        tooltip: 'Dodaj test',
-        child: const Icon(TablerIcons.plus),
-      ),
+      floatingActionButton: const SpeedDial(),
     );
   }
 }
