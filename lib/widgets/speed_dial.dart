@@ -1,6 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart' as sd;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:testownik/models/quizzes_model.dart';
+import 'package:path/path.dart' as path;
 
 class SpeedDial extends StatelessWidget {
   const SpeedDial({super.key});
@@ -19,7 +23,13 @@ class SpeedDial extends StatelessWidget {
       overlayOpacity: 0.95,
       children: [
         sd.SpeedDialChild(
-          onTap: () => ScaffoldMessenger.of(context).showSnackBar(snackBar),
+          onTap: () {
+            FilePicker.platform.getDirectoryPath().then((directory) {
+              if (directory != null) {
+                context.read<QuizzesModel>().addQuiz(path.basename(directory));
+              }
+            });
+          },
           label: 'Wybierz folder',
           labelStyle: const TextStyle(color: Colors.white),
           labelBackgroundColor: Colors.transparent,

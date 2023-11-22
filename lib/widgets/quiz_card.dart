@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class QuizCard extends StatelessWidget {
-  const QuizCard({super.key});
+  const QuizCard(this.quiz, {super.key});
+
+  final String quiz;
 
   final snackBar = const SnackBar(content: Text('Not implemented!'));
 
@@ -15,23 +17,23 @@ class QuizCard extends StatelessWidget {
         onTap: () => ScaffoldMessenger.of(context).showSnackBar(snackBar),
         child: Column(
           children: [
-            const ListTile(
+            ListTile(
               title: Padding(
-                padding: EdgeInsets.only(bottom: 5.0),
+                padding: const EdgeInsets.only(bottom: 5.0),
                 child: Text(
-                  'Języki programowania',
+                  quiz,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              subtitle: Text(
+              subtitle: const Text(
                 'v1.2.3 • 21 pytań',
                 style: TextStyle(color: Colors.white70),
               ),
-              leading: Icon(
+              leading: const Icon(
                 TablerIcons.code,
                 color: Color(0xFF3378FF),
               ),
-              trailing: Icon(
+              trailing: const Icon(
                 TablerIcons.chevron_right,
                 color: Color(0xFFA5A5A5),
               ),

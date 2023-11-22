@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:testownik/models/quizzes_model.dart';
 import 'package:testownik/themes.dart';
 import 'package:testownik/widgets/quiz_card.dart';
 import 'package:testownik/widgets/speed_dial.dart';
@@ -13,12 +15,14 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
+      body: ListView(
+        scrollDirection: Axis.vertical,
         padding: const EdgeInsets.symmetric(vertical: 5.0),
-        itemCount: 25,
-        itemBuilder: (BuildContext context, int index) {
-          return const QuizCard();
-        },
+        children: context
+            .watch<QuizzesModel>()
+            .quizzes
+            .map((quiz) => QuizCard(quiz))
+            .toList(),
       ),
       appBar: AppBar(
         title: const Text(
