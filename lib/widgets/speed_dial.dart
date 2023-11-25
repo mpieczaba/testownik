@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart' as sd;
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:testownik/models/quizzes_model.dart';
 import 'package:path/path.dart' as path;
+import 'package:testownik/providers/home_provider.dart';
 
 class SpeedDial extends StatelessWidget {
   const SpeedDial({super.key});
@@ -27,7 +27,7 @@ class SpeedDial extends StatelessWidget {
           onTap: () {
             FilePicker.platform.getDirectoryPath().then((directory) {
               if (directory != null) {
-                context.read<QuizzesModel>().addQuiz(path.basename(directory));
+                context.read<HomeProvider>().addQuiz(path.basename(directory));
               }
             });
           },

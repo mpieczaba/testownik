@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:testownik/models/quizzes_model.dart';
+import 'package:testownik/providers/home_provider.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
@@ -16,15 +16,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         duration: const Duration(milliseconds: 200),
         transitionBuilder: (Widget child, Animation<double> animation) =>
             ScaleTransition(scale: animation, child: child),
-        child: context.watch<QuizzesModel>().isReorderable
+        child: context.watch<HomeProvider>().isReorderable
             ? PopScope(
                 canPop: false,
                 onPopInvoked: (bool didPop) =>
-                    context.read<QuizzesModel>().switchReorderable(false),
+                    context.read<HomeProvider>().switchReorderable(false),
                 child: IconButton(
                   key: const ValueKey(1),
                   onPressed: () =>
-                      context.read<QuizzesModel>().switchReorderable(false),
+                      context.read<HomeProvider>().switchReorderable(false),
                   icon: const Icon(TablerIcons.x),
                   tooltip: 'Zamknij',
                 ),
@@ -39,7 +39,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        child: context.watch<QuizzesModel>().isReorderable
+        child: context.watch<HomeProvider>().isReorderable
             ? null
             : const Text(
                 'Testownik',
@@ -51,7 +51,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           duration: const Duration(milliseconds: 200),
           transitionBuilder: (Widget child, Animation<double> animation) =>
               ScaleTransition(scale: animation, child: child),
-          child: context.watch<QuizzesModel>().isReorderable
+          child: context.watch<HomeProvider>().isReorderable
               ? IconButton(
                   key: const ValueKey(1),
                   onPressed: () =>
@@ -71,7 +71,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           duration: const Duration(milliseconds: 200),
           transitionBuilder: (Widget child, Animation<double> animation) =>
               ScaleTransition(scale: animation, child: child),
-          child: context.watch<QuizzesModel>().isReorderable
+          child: context.watch<HomeProvider>().isReorderable
               ? IconButton(
                   key: const ValueKey(1),
                   onPressed: () =>

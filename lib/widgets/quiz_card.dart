@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:testownik/models/quizzes_model.dart';
+import 'package:testownik/providers/home_provider.dart';
 
 class QuizCard extends StatelessWidget {
   const QuizCard(this.quiz, {required super.key, required this.index});
@@ -18,11 +18,11 @@ class QuizCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onLongPress: () => context.read<QuizzesModel>().switchReorderable(true),
+        onLongPress: () => context.read<HomeProvider>().switchReorderable(true),
         onTap: () => ScaffoldMessenger.of(context).showSnackBar(_snackBar),
         child: ReorderableDragStartListener(
           index: index,
-          enabled: context.watch<QuizzesModel>().isReorderable,
+          enabled: context.watch<HomeProvider>().isReorderable,
           child: Column(
             children: [
               ListTile(
@@ -46,7 +46,7 @@ class QuizCard extends StatelessWidget {
                   transitionBuilder:
                       (Widget child, Animation<double> animation) =>
                           ScaleTransition(scale: animation, child: child),
-                  child: context.read<QuizzesModel>().isReorderable
+                  child: context.read<HomeProvider>().isReorderable
                       ? const Icon(
                           key: ValueKey(1),
                           TablerIcons.menu,

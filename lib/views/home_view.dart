@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:testownik/models/quizzes_model.dart';
+import 'package:testownik/providers/home_provider.dart';
 import 'package:testownik/widgets/home_app_bar.dart';
 import 'package:testownik/widgets/quiz_card.dart';
 import 'package:testownik/widgets/speed_dial.dart';
@@ -21,19 +21,19 @@ class HomeView extends StatelessWidget {
               onReorder: (oldIndex, newIndex) {
                 if (oldIndex < newIndex) newIndex -= 1;
 
-                context.read<QuizzesModel>().reorder(oldIndex, newIndex);
+                context.read<HomeProvider>().reorder(oldIndex, newIndex);
               },
               proxyDecorator:
                   (Widget child, int index, Animation<double> animation) =>
                       child,
               children: context
-                  .watch<QuizzesModel>()
+                  .watch<HomeProvider>()
                   .quizzes
                   .map(
                     (quiz) => QuizCard(
                       quiz,
                       key: Key(quiz),
-                      index: context.read<QuizzesModel>().quizzes.indexOf(quiz),
+                      index: context.read<HomeProvider>().quizzes.indexOf(quiz),
                     ),
                   )
                   .toList(),
