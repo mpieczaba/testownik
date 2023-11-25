@@ -1,53 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:testownik/models/quizzes_model.dart';
-import 'package:testownik/themes.dart';
+import 'package:testownik/widgets/home_app_bar.dart';
 import 'package:testownik/widgets/quiz_card.dart';
 import 'package:testownik/widgets/speed_dial.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
-  final snackBar = const SnackBar(content: Text('Not implemented!'));
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        children: context
-            .watch<QuizzesModel>()
-            .quizzes
-            .map((quiz) => QuizCard(quiz))
-            .toList(),
-      ),
-      appBar: AppBar(
-        title: const Text(
-          'Testownik',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        // TODO: Change to more dektop-friendly Tooltip widget
-        actions: [
-          IconButton(
-            onPressed: () =>
-                ScaffoldMessenger.of(context).showSnackBar(snackBar),
-            icon: const Icon(TablerIcons.search),
-            tooltip: 'Szukaj',
-          ),
-          IconButton(
-            onPressed: () =>
-                ScaffoldMessenger.of(context).showSnackBar(snackBar),
-            icon: const Icon(TablerIcons.settings),
-            tooltip: 'Ustawienia',
+      body: Overlay(
+        initialEntries: [
+          OverlayEntry(
+            builder: (context) => ReorderableListView(
+              scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              buildDefaultDragHandles: false,
+              onReorder: (oldIndex, newIndex) {
+                if (oldIndex < newIndex) newIndex -= 1;
+
+                context.read<QuizzesModel>().reorder(oldIndex, newIndex);
+              },
+              proxyDecorator:
+                  (Widget child, int index, Animation<double> animation) =>
+                      child,
+              children: context
+                  .watch<QuizzesModel>()
+                  .quizzes
+                  .map(
+                    (quiz) => QuizCard(
+                      quiz,
+                      key: Key(quiz),
+                      index: context.read<QuizzesModel>().quizzes.indexOf(quiz),
+                    ),
+                  )
+                  .toList(),
+            ),
           )
         ],
-        systemOverlayStyle: SystemUiOverlayStyle(
-          systemNavigationBarColor: theme.appBarTheme.backgroundColor,
-        ),
       ),
+      appBar: const HomeAppBar(),
       floatingActionButton: const SpeedDial(),
     );
   }

@@ -21,6 +21,7 @@ class SpeedDial extends StatelessWidget {
       activeIcon: TablerIcons.x,
       overlayColor: const Color(0xFF1A1E22),
       overlayOpacity: 0.95,
+      animationDuration: const Duration(milliseconds: 200),
       children: [
         sd.SpeedDialChild(
           onTap: () {
