@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:testownik/models/quizzes_model.dart';
@@ -16,12 +17,17 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         transitionBuilder: (Widget child, Animation<double> animation) =>
             ScaleTransition(scale: animation, child: child),
         child: context.watch<QuizzesModel>().isReorderable
-            ? IconButton(
-                key: const ValueKey(1),
-                onPressed: () =>
+            ? PopScope(
+                canPop: false,
+                onPopInvoked: (bool didPop) =>
                     context.read<QuizzesModel>().switchReorderable(false),
-                icon: const Icon(TablerIcons.x),
-                tooltip: 'Zamknij',
+                child: IconButton(
+                  key: const ValueKey(1),
+                  onPressed: () =>
+                      context.read<QuizzesModel>().switchReorderable(false),
+                  icon: const Icon(TablerIcons.x),
+                  tooltip: 'Zamknij',
+                ),
               )
             : IconButton(
                 key: const ValueKey(2),
@@ -82,6 +88,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
         ),
       ],
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: Theme.of(context).appBarTheme.backgroundColor,
+      ),
     );
   }
 
