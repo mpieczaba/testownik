@@ -13,34 +13,40 @@ class SpeedDial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return sd.SpeedDial(
-      spacing: 16,
-      childMargin: EdgeInsets.zero,
-      childPadding: const EdgeInsets.all(8.0),
-      icon: TablerIcons.plus,
-      activeIcon: TablerIcons.x,
-      overlayColor: const Color(0xFF1A1E22),
-      overlayOpacity: 0.95,
-      animationDuration: const Duration(milliseconds: 200),
-      children: [
-        sd.SpeedDialChild(
-          onTap: () {
-            FilePicker.platform.getDirectoryPath().then((directory) {
-              if (directory != null) {
-                context.read<HomeProvider>().addQuiz(path.basename(directory));
-              }
-            });
-          },
-          label: 'Wybierz folder',
-          labelStyle: const TextStyle(color: Colors.white),
-          labelBackgroundColor: Colors.transparent,
-          labelShadow: List.empty(),
-          backgroundColor: const Color(0xFFF2F2F2),
-          foregroundColor: Colors.black,
-          shape: const CircleBorder(),
-          child: const Icon(TablerIcons.folder_plus),
-        ),
-      ],
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 200),
+      child: context.watch<HomeProvider>().isReorderable
+          ? null
+          : sd.SpeedDial(
+              spacing: 16,
+              childMargin: EdgeInsets.zero,
+              childPadding: const EdgeInsets.all(8.0),
+              icon: TablerIcons.plus,
+              activeIcon: TablerIcons.x,
+              overlayColor: Colors.black54,
+              overlayOpacity: 0.5,
+              animationDuration: const Duration(milliseconds: 200),
+              children: [
+                sd.SpeedDialChild(
+                  onTap: () {
+                    FilePicker.platform.getDirectoryPath().then((directory) {
+                      if (directory != null) {
+                        context.read<HomeProvider>().addQuiz(
+                            path.basename(directory), path.absolute(directory));
+                      }
+                    });
+                  },
+                  label: 'Wybierz folder',
+                  labelStyle: const TextStyle(color: Colors.white),
+                  labelBackgroundColor: Colors.transparent,
+                  labelShadow: List.empty(),
+                  backgroundColor: const Color(0xFFF2F2F2),
+                  foregroundColor: Colors.black,
+                  shape: const CircleBorder(),
+                  child: const Icon(TablerIcons.folder_plus),
+                ),
+              ],
+            ),
     );
   }
 }

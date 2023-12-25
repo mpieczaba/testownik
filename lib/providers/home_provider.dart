@@ -1,44 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testownik/models/quiz_model.dart';
+import 'package:testownik/models/quizzes_list_item_model.dart';
+import 'package:testownik/repositories/quiz_repository.dart';
 
 class HomeProvider with ChangeNotifier {
   HomeProvider({required this.prefs});
 
   final SharedPreferences prefs;
 
-  List<String> get _quizzes => prefs.getStringList('quizzes') ?? [];
+  late final QuizRepository _quizzesRepository = QuizRepository(prefs: prefs);
 
-  set _quizzes(List<String> newQuizzes) =>
-      (() async => await prefs.setStringList('quizzes', newQuizzes))();
-
-  List<String> get quizzes => _quizzes;
+  late List<QuizzesListItemModel> quizzes = _quizzesRepository.quizzes
+      .map((quiz) => QuizzesListItemModel()..setData(quiz))
+      .toList();
 
   bool _isReorderable = false;
 
   bool get isReorderable => _isReorderable;
 
-  void addQuiz(String quiz) async {
-    List<String> temp = _quizzes;
-    if (temp.contains(quiz)) return;
-    temp.add(quiz);
+  void addQuiz(String name, String path) {
+    if (quizzes.where((quiz) => quiz.name == name).isNotEmpty) return;
 
-    _quizzes = temp;
+    _quizzesRepository.addQuiz(QuizModel(name: name, path: path));
+    _updateQuizzesList();
+
+    notifyListeners();
+  }
+
+  void removeQuizzes() {
+    quizzes
+        .where((quiz) => quiz.isChecked)
+        .forEach((quiz) => _quizzesRepository.removeQuiz(quiz.name));
+    _updateQuizzesList();
+
+    notifyListeners();
+  }
+
+  void checkQuiz(String name) {
+    quizzes = quizzes.map((quiz) {
+      if (quiz.name == name) quiz.isChecked = !quiz.isChecked;
+
+      return quiz;
+    }).toList();
 
     notifyListeners();
   }
 
   void switchReorderable(bool value) {
     _isReorderable = value;
+
+    if (!value) {
+      quizzes
+          .where((quiz) => quiz.isChecked)
+          .forEach((quiz) => quiz.isChecked = false);
+    }
+
     notifyListeners();
   }
 
-  void reorder(int oldIndex, int newIndex) async {
-    List<String> temp = _quizzes;
-    final String item = temp.removeAt(oldIndex);
-    temp.insert(newIndex, item);
-
-    _quizzes = temp;
+  void reorder(int oldIndex, int newIndex) {
+    _quizzesRepository.reorderQuizzes(oldIndex, newIndex);
+    _updateQuizzesList();
 
     notifyListeners();
+  }
+
+  void _updateQuizzesList() {
+    quizzes = _quizzesRepository.quizzes
+        .map((quiz) => QuizzesListItemModel()..setData(quiz))
+        .toList();
   }
 }

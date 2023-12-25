@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:testownik/models/quizzes_list_item_model.dart';
 import 'package:testownik/providers/home_provider.dart';
 
 class QuizCard extends StatelessWidget {
   const QuizCard(this.quiz, {required super.key, required this.index});
 
-  final String quiz;
+  final QuizzesListItemModel quiz;
 
   final int index;
-
-  final _snackBar = const SnackBar(content: Text('Not implemented!'));
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +17,15 @@ class QuizCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onLongPress: () => context.read<HomeProvider>().switchReorderable(true),
-        onTap: () => ScaffoldMessenger.of(context).showSnackBar(_snackBar),
+        onLongPress: () {
+          context.read<HomeProvider>().switchReorderable(true);
+          context.read<HomeProvider>().checkQuiz(quiz.name);
+        },
+        onTap: () {
+          if (context.read<HomeProvider>().isReorderable) {
+            context.read<HomeProvider>().checkQuiz(quiz.name);
+          }
+        },
         child: ReorderableDragStartListener(
           index: index,
           enabled: context.watch<HomeProvider>().isReorderable,
@@ -29,7 +35,7 @@ class QuizCard extends StatelessWidget {
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 5.0),
                   child: Text(
-                    quiz,
+                    quiz.name,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -37,9 +43,26 @@ class QuizCard extends StatelessWidget {
                   'v1.2.3 • 21 pytań',
                   style: TextStyle(color: Colors.white70),
                 ),
-                leading: const Icon(
-                  TablerIcons.code,
-                  color: Color(0xFF3378FF),
+                leading: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) =>
+                          ScaleTransition(scale: animation, child: child),
+                  child: context
+                          .watch<HomeProvider>()
+                          .quizzes
+                          .firstWhere((q) => q.name == quiz.name)
+                          .isChecked
+                      ? const Icon(
+                          key: ValueKey(1),
+                          TablerIcons.circle_check,
+                          color: Color(0xFF39B54A),
+                        )
+                      : const Icon(
+                          key: ValueKey(2),
+                          TablerIcons.code,
+                          color: Color(0xFF3378FF),
+                        ),
                 ),
                 trailing: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 200),
@@ -60,14 +83,14 @@ class QuizCard extends StatelessWidget {
                 ),
               ),
               LinearProgressIndicator(
-                value: 0.45,
+                value: quiz.completion,
                 color: const Color(0xFF39B54A),
                 backgroundColor: const Color(0xFF39B54A).withOpacity(0.3),
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(5.0),
                   bottomRight: Radius.circular(5.0),
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -32,8 +32,11 @@ class HomeView extends StatelessWidget {
                   .map(
                     (quiz) => QuizCard(
                       quiz,
-                      key: Key(quiz),
-                      index: context.read<HomeProvider>().quizzes.indexOf(quiz),
+                      key: Key(quiz.name),
+                      index: context
+                          .read<HomeProvider>()
+                          .quizzes
+                          .indexWhere((element) => element.path == quiz.path),
                     ),
                   )
                   .toList(),

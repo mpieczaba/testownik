@@ -23,5 +23,10 @@ var theme = ThemeData(
     elevation: 1.0,
     color: Color(0xFF25282F),
   ),
+  dialogTheme: const DialogTheme(
+    elevation: 1.0,
+    titleTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+    backgroundColor: Color(0xFF21252B),
+  ),
   listTileTheme: const ListTileThemeData(textColor: Colors.white),
 );

@@ -9,6 +9,74 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final _snackBar = const SnackBar(content: Text('Not implemented!'));
 
+  void _showQuizRemoveAlertDialog(BuildContext context) async {
+    final homeProvider = context.read<HomeProvider>();
+    final checkedQuizzesLength =
+        homeProvider.quizzes.where((quiz) => quiz.isChecked).length;
+
+    showGeneralDialog(
+      context: context,
+      transitionDuration: const Duration(milliseconds: 200),
+      transitionBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,
+      ) =>
+          ScaleTransition(
+              scale: Tween(begin: 0.9, end: 1.0).animate(animation),
+              child: child),
+      pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) {
+        return AlertDialog(
+          title: Text(
+            checkedQuizzesLength == 1
+                ? 'Usuń testownik'
+                : 'Usuń testowniki: $checkedQuizzesLength',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(checkedQuizzesLength == 1
+              ? 'Czy na pewno chcesz usunąć ten testownik?'
+              : 'Czy na pewno chcesz usunąć te testowniki?'),
+          actions: [
+            TextButton(
+              style: ButtonStyle(
+                overlayColor:
+                    MaterialStatePropertyAll(Colors.white.withAlpha(10)),
+              ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'Anuluj',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                overlayColor: MaterialStatePropertyAll(
+                    const Color(0xFFF15151).withAlpha(10)),
+              ),
+              onPressed: () {
+                homeProvider.removeQuizzes();
+                homeProvider.switchReorderable(false);
+
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Usuń',
+                style: TextStyle(
+                    color: Color(0xFFF15151), fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -54,8 +122,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: context.watch<HomeProvider>().isReorderable
               ? IconButton(
                   key: const ValueKey(1),
-                  onPressed: () =>
-                      ScaffoldMessenger.of(context).showSnackBar(_snackBar),
+                  onPressed: () => _showQuizRemoveAlertDialog(context),
+                  // ScaffoldMessenger.of(context).showSnackBar(_snackBar),
                   icon: const Icon(TablerIcons.trash),
                   tooltip: 'Usuń',
                 )
