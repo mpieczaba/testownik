@@ -31,8 +31,9 @@ class SpeedDial extends StatelessWidget {
                   onTap: () {
                     FilePicker.platform.getDirectoryPath().then((directory) {
                       if (directory != null) {
-                        context.read<HomeProvider>().addQuiz(
-                            path.basename(directory), path.absolute(directory));
+                        context
+                            .read<HomeProvider>()
+                            .addQuiz(path.basename(directory), directory);
                       }
                     });
                   },

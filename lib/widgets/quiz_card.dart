@@ -39,9 +39,13 @@ class QuizCard extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                subtitle: const Text(
-                  'v1.2.3 • 21 pytań',
-                  style: TextStyle(color: Colors.white70),
+                subtitle: Text(
+                  quiz.questionsNumber == 1
+                      ? '${quiz.version} • 1 pytanie'
+                      : 0 < quiz.questionsNumber && quiz.questionsNumber < 5
+                          ? '${quiz.version} • ${quiz.questionsNumber} pytania'
+                          : '${quiz.version} • ${quiz.questionsNumber} pytań',
+                  style: const TextStyle(color: Colors.white70),
                 ),
                 leading: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 200),
@@ -60,7 +64,7 @@ class QuizCard extends StatelessWidget {
                         )
                       : const Icon(
                           key: ValueKey(2),
-                          TablerIcons.code,
+                          TablerIcons.folder_question,
                           color: Color(0xFF3378FF),
                         ),
                 ),

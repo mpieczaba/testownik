@@ -20,7 +20,7 @@ class HomeProvider with ChangeNotifier {
   bool get isReorderable => _isReorderable;
 
   void addQuiz(String name, String path) {
-    if (quizzes.where((quiz) => quiz.name == name).isNotEmpty) return;
+    if (quizzes.where((quiz) => quiz.path == path).isNotEmpty) return;
 
     _quizzesRepository.addQuiz(QuizModel(name: name, path: path));
     _updateQuizzesList();
